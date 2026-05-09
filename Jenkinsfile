@@ -58,6 +58,18 @@ pipeline {
             }
         }
 
+        stage('Trivy Scan Backend Image') {
+            steps {
+                sh 'trivy image voting-backend:v1'
+            }
+        }
+
+        stage('Trivy Scan Frontend Image') {
+            steps {
+                sh 'trivy image voting-frontend:v1'
+            }
+        }
+
         stage('DockerHub Login') {
             steps {
                 sh """
