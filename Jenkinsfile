@@ -65,8 +65,8 @@ pipeline {
 
         stage('Tag Docker Images') {
             steps {
-                sh 'docker tag voting-backend:v2 zeeshandynamo/voting-backend:v1'
-                sh 'docker tag voting-frontend:v2 zeeshandynamo/voting-frontend:v1'
+                sh 'docker tag voting-backend:v2 zeeshandynamo/voting-backend:v2'
+                sh 'docker tag voting-frontend:v2 zeeshandynamo/voting-frontend:v2'
             }
         }
 
