@@ -6,8 +6,7 @@ function App() {
 
   const [candidates, setCandidates] = useState([]);
 
-  const API_URL = "http://65.0.18.239:5000/api/candidates";
-
+  const API_URL = "/api/candidates";
 
   // FETCH CANDIDATES
   const fetchCandidates = async () => {
