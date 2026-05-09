@@ -1,53 +1,108 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f4f7fb;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg, #4285f4, #ff9900, #7fba00, #76b900, #1877f2, #a2aaad, #e50914);
+  min-height: 100vh;
 }
 
-.container {
+.app {
+  min-height: 100vh;
+  padding: 40px 20px;
   text-align: center;
-  padding: 40px;
+  color: #ffffff;
 }
 
-h1 {
-  color: #1e293b;
-  margin-bottom: 40px;
+.hero {
+  max-width: 900px;
+  margin: 0 auto 35px;
+  padding: 30px;
+  border-radius: 24px;
+  background: rgba(0, 0, 0, 0.35);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: 42px;
+}
+
+.hero p {
+  font-size: 18px;
+  margin-top: 12px;
+  color: #f1f1f1;
 }
 
 .card-container {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .card {
-  background: white;
-  padding: 25px;
-  width: 220px;
-  border-radius: 15px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 26px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #111827;
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.28);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.35);
 }
 
 .card h2 {
-  color: #0f172a;
+  margin: 0 0 12px;
+  font-size: 28px;
 }
 
-.card p {
-  font-size: 18px;
-  color: #334155;
+.votes {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333333;
 }
 
 button {
-  background: #2563eb;
-  color: white;
   border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  cursor: pointer;
+  border-radius: 999px;
+  padding: 12px 28px;
   font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+  background: linear-gradient(135deg, #4285f4, #1877f2);
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 button:hover {
-  background: #1d4ed8;
+  transform: scale(1.07);
+  opacity: 0.92;
+}
+
+.result-section {
+  margin-top: 40px;
+}
+
+.winner-button {
+  background: linear-gradient(135deg, #ff9900, #e50914, #76b900);
+  font-size: 18px;
+  padding: 15px 35px;
+}
+
+.winner-message {
+  display: inline-block;
+  margin-top: 25px;
+  padding: 20px 30px;
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.45);
+  color: #ffffff;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
 }
