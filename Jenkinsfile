@@ -36,72 +36,60 @@ pipeline {
             steps {
                 script {
                     def scannerHome = tool 'sonar-scanner'
-
                     withSonarQubeEnv('sonarqube') {
-                        sh """
-                        ${scannerHome}/bin/sonar-scanner
-                        """
+                        sh "${scannerHome}/bin/sonar-scanner"
                     }
                 }
             }
         }
 
-        stage('Build Docker Backend Image') {
+        stage('Build Docker Images') {
             steps {
                 sh 'docker build -t voting-backend:v1 ./backend'
-            }
-        }
-
-        stage('Build Docker Frontend Image') {
-            steps {
                 sh 'docker build -t voting-frontend:v1 ./frontend'
             }
         }
 
-        stage('Trivy Scan Backend Image') {
+        stage('Trivy Security Scan') {
             steps {
                 sh 'trivy image voting-backend:v1'
-            }
-        }
-
-        stage('Trivy Scan Frontend Image') {
-            steps {
                 sh 'trivy image voting-frontend:v1'
             }
         }
 
         stage('DockerHub Login') {
             steps {
-                sh """
-                echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin
-                """
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_USERNAME --password-stdin'
             }
         }
 
-        stage('Tag Backend Image') {
+        stage('Tag Docker Images') {
             steps {
                 sh 'docker tag voting-backend:v1 zeeshandynamo/voting-backend:v1'
-            }
-        }
-
-        stage('Tag Frontend Image') {
-            steps {
                 sh 'docker tag voting-frontend:v1 zeeshandynamo/voting-frontend:v1'
             }
         }
 
-        stage('Push Backend Image') {
+        stage('Push Images to DockerHub') {
             steps {
                 sh 'docker push zeeshandynamo/voting-backend:v1'
-            }
-        }
-
-        stage('Push Frontend Image') {
-            steps {
                 sh 'docker push zeeshandynamo/voting-frontend:v1'
             }
         }
 
+        stage('Deploy to K3s Kubernetes') {
+            steps {
+                withCredentials([file(credentialsId: 'k3s-kubeconfig', variable: 'KUBECONFIG_FILE')]) {
+                    sh '''
+                    kubectl --kubeconfig=$KUBECONFIG_FILE apply -f k8s/
+                    kubectl --kubeconfig=$KUBECONFIG_FILE rollout restart deployment/backend-deployment -n voting-app
+                    kubectl --kubeconfig=$KUBECONFIG_FILE rollout restart deployment/frontend-deployment -n voting-app
+                    kubectl --kubeconfig=$KUBECONFIG_FILE rollout status deployment/backend-deployment -n voting-app
+                    kubectl --kubeconfig=$KUBECONFIG_FILE rollout status deployment/frontend-deployment -n voting-app
+                    '''
+                }
+            }
+        }
     }
 
     post {
