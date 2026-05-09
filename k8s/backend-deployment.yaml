@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: zeeshandynamo/voting-backend:v1
+        image: zeeshandynamo/voting-backend:v2
 
         ports:
         - containerPort: 5000

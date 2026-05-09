@@ -45,15 +45,15 @@ pipeline {
 
         stage('Build Docker Images') {
             steps {
-                sh 'docker build -t voting-backend:v1 ./backend'
-                sh 'docker build -t voting-frontend:v1 ./frontend'
+                sh 'docker build -t voting-backend:v2 ./backend'
+                sh 'docker build -t voting-frontend:v2 ./frontend'
             }
         }
 
         stage('Trivy Security Scan') {
             steps {
-                sh 'trivy image voting-backend:v1'
-                sh 'trivy image voting-frontend:v1'
+                sh 'trivy image voting-backend:v2'
+                sh 'trivy image voting-frontend:v2'
             }
         }
 
@@ -65,15 +65,15 @@ pipeline {
 
         stage('Tag Docker Images') {
             steps {
-                sh 'docker tag voting-backend:v1 zeeshandynamo/voting-backend:v1'
-                sh 'docker tag voting-frontend:v1 zeeshandynamo/voting-frontend:v1'
+                sh 'docker tag voting-backend:v2 zeeshandynamo/voting-backend:v1'
+                sh 'docker tag voting-frontend:v2 zeeshandynamo/voting-frontend:v1'
             }
         }
 
         stage('Push Images to DockerHub') {
             steps {
-                sh 'docker push zeeshandynamo/voting-backend:v1'
-                sh 'docker push zeeshandynamo/voting-frontend:v1'
+                sh 'docker push zeeshandynamo/voting-backend:v2'
+                sh 'docker push zeeshandynamo/voting-frontend:v2'
             }
         }
 
