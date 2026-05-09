@@ -3,12 +3,6 @@ pipeline {
 
     stages {
 
-        stage('Clone Repository') {
-            steps {
-                git 'https://github.com/zeeshandynamo/devsecops-voting-platform.git'
-            }
-        }
-
         stage('Build Backend') {
             steps {
                 dir('backend') {
