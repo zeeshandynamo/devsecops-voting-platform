@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: zeeshandynamo/voting-backend:v2
+        image: zeeshandynamo/voting-backend:placeholder
 
         ports:
         - containerPort: 5000
@@ -55,3 +55,4 @@ spec:
           limits:
             cpu: "500m"
             memory: "512Mi"
+
