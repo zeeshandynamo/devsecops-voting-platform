@@ -6,16 +6,60 @@ const API_URL = "/api/candidates";
 
 const companyLogos = {
   Google: "https://cdn.simpleicons.org/google",
-  Amazon: "https://cdn.simpleicons.org/amazon/FF9900",
-  Microsoft: "https://cdn.simpleicons.org/microsoft/5E5E5E",
   NVIDIA: "https://cdn.simpleicons.org/nvidia/76B900",
   Meta: "https://cdn.simpleicons.org/meta/0866FF",
   Apple: "https://cdn.simpleicons.org/apple/000000",
   Netflix: "https://cdn.simpleicons.org/netflix/E50914",
   Tesla: "https://cdn.simpleicons.org/tesla/CC0000",
-  Salesforce: "https://cdn.simpleicons.org/salesforce/00A1E0",
-  Adobe: "https://cdn.simpleicons.org/adobe/FF0000",
 };
+
+function CompanyLogo({ name }) {
+  if (name === "Amazon") {
+    return (
+      <div className="custom-logo amazon-logo">
+        <span>amazon</span>
+        <div className="amazon-smile"></div>
+      </div>
+    );
+  }
+
+  if (name === "Microsoft") {
+    return (
+      <div className="custom-logo microsoft-logo">
+        <div className="ms-grid">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    );
+  }
+
+  if (name === "Salesforce") {
+    return (
+      <div className="custom-logo salesforce-logo">
+        <span>salesforce</span>
+      </div>
+    );
+  }
+
+  if (name === "Adobe") {
+    return (
+      <div className="custom-logo adobe-logo">
+        <span>A</span>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={companyLogos[name]}
+      alt={`${name} logo`}
+      className="company-logo"
+    />
+  );
+}
 
 function App() {
   const [candidates, setCandidates] = useState([]);
@@ -76,14 +120,7 @@ function App() {
           {candidates.map((candidate) => (
             <div className="company-card" key={candidate._id}>
               <div className="logo-box">
-                <img
-                  src={companyLogos[candidate.name]}
-                  alt={`${candidate.name} logo`}
-                  className="company-logo"
-                  onError={(e) => {
-                    e.target.style.display = "none";
-                  }}
-                />
+                <CompanyLogo name={candidate.name} />
               </div>
 
               <h2>{candidate.name}</h2>
