@@ -426,7 +426,7 @@ Attached Elastic IPs to both servers.
 
 ## Zeeshan Ali
 
-DevOps | Cloud | Kubernetes | DevSecOps Engineer
+DevSecOps | Cloud | Kubernetes | DevOps Engineer
 
 ### Technologies Worked On
 
