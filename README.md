@@ -424,7 +424,7 @@ Attached Elastic IPs to both servers.
 
 # 👨‍💻 Author
 
-## Zeeshan Ali
+## Zeeshanali M Mannur
 
 DevSecOps | Cloud | Kubernetes | DevOps Engineer
 
@@ -468,5 +468,5 @@ It demonstrates practical implementation of:
 🍴 Fork the repository
 
 📢 Connect on LinkedIn
-
+🔗 https://www.linkedin.com/in/zeeshanali-m-mannur-2a5523141/
 🚀 Keep Learning DevOps & Cloud Technologies
