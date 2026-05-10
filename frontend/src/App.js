@@ -2,57 +2,34 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
 
-const companyMeta = {
-  Google: { logo: "https://cdn.simpleicons.org/google", color: "#4285F4" },
-  Amazon: { logo: "https://cdn.simpleicons.org/amazon", color: "#FF9900" },
-  Microsoft: { logo: "https://cdn.simpleicons.org/microsoft", color: "#00A4EF" },
-  NVIDIA: { logo: "https://cdn.simpleicons.org/nvidia", color: "#76B900" },
-  Meta: { logo: "https://cdn.simpleicons.org/meta", color: "#0866FF" },
-  Apple: { logo: "https://cdn.simpleicons.org/apple", color: "#1D1D1F" },
-  Netflix: { logo: "https://cdn.simpleicons.org/netflix", color: "#E50914" },
-  Tesla: { logo: "https://cdn.simpleicons.org/tesla", color: "#CC0000" },
-  Salesforce: { logo: "https://cdn.simpleicons.org/salesforce", color: "#00A1E0" },
-  Adobe: { logo: "https://cdn.simpleicons.org/adobe", color: "#FF0000" },
+const API_URL = "/api/candidates";
+
+const companyLogos = {
+  Google: "https://cdn.simpleicons.org/google",
+  Amazon: "https://cdn.simpleicons.org/amazon/FF9900",
+  Microsoft: "https://cdn.simpleicons.org/microsoft/5E5E5E",
+  NVIDIA: "https://cdn.simpleicons.org/nvidia/76B900",
+  Meta: "https://cdn.simpleicons.org/meta/0866FF",
+  Apple: "https://cdn.simpleicons.org/apple/000000",
+  Netflix: "https://cdn.simpleicons.org/netflix/E50914",
+  Tesla: "https://cdn.simpleicons.org/tesla/CC0000",
+  Salesforce: "https://cdn.simpleicons.org/salesforce/00A1E0",
+  Adobe: "https://cdn.simpleicons.org/adobe/FF0000",
 };
 
 function App() {
   const [candidates, setCandidates] = useState([]);
-  const [winner, setWinner] = useState("");
-
-  const API_URL = "/api/candidates";
+  const [winner, setWinner] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchCandidates = async () => {
     try {
       const response = await axios.get(API_URL);
       setCandidates(response.data);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching candidates:", error);
-    }
-  };
-
-  const voteCandidate = async (id) => {
-    try {
-      await axios.put(`${API_URL}/vote/${id}`);
-      fetchCandidates();
-      setWinner("");
-    } catch (error) {
-      console.error("Error voting:", error);
-    }
-  };
-
-  const showWinner = () => {
-    if (candidates.length === 0) {
-      setWinner("No candidates available yet.");
-      return;
-    }
-
-    const maxVotes = Math.max(...candidates.map((candidate) => candidate.votes));
-    const winners = candidates.filter((candidate) => candidate.votes === maxVotes);
-
-    if (winners.length > 1) {
-      setWinner(`It's a tie between ${winners.map((winner) => winner.name).join(", ")}!`);
-    } else {
-      setWinner(`Congratulations ${winners[0].name} has won!`);
+      setLoading(false);
     }
   };
 
@@ -60,48 +37,76 @@ function App() {
     fetchCandidates();
   }, []);
 
+  const voteCandidate = async (id) => {
+    try {
+      await axios.put(`${API_URL}/vote/${id}`);
+      fetchCandidates();
+    } catch (error) {
+      console.error("Error voting:", error);
+    }
+  };
+
+  const showWinner = () => {
+    if (candidates.length === 0) {
+      setWinner("No candidates available");
+      return;
+    }
+
+    const topCandidate = candidates.reduce((max, candidate) =>
+      candidate.votes > max.votes ? candidate : max
+    );
+
+    setWinner(`Congratulations ${topCandidate.name} has won!`);
+  };
+
   return (
     <div className="app">
-      <section className="hero">
-        <div className="badge">Live Kubernetes Deployment</div>
-        <h1>Tech Giants Voting Platform</h1>
+      <div className="hero-section">
+        <h1>DevSecOps Voting Platform</h1>
         <p>
-          Vote for your favorite company and watch updates flow through Jenkins,
-          DockerHub, Kubernetes, Prometheus, and Grafana.
+          Vote for your favorite tech company and watch the result update live
+          through our Kubernetes-powered platform.
         </p>
-      </section>
+      </div>
 
-      <section className="card-container">
-        {candidates.map((candidate) => {
-          const meta = companyMeta[candidate.name] || {
-            logo: "https://cdn.simpleicons.org/react",
-            color: "#64748B",
-          };
-
-          return (
-            <div className="card" key={candidate._id} style={{ "--accent": meta.color }}>
-              <div className="logo-wrap">
-                <img src={meta.logo} alt={`${candidate.name} logo`} />
+      {loading ? (
+        <div className="loading">Loading candidates...</div>
+      ) : (
+        <div className="cards-container">
+          {candidates.map((candidate) => (
+            <div className="company-card" key={candidate._id}>
+              <div className="logo-box">
+                <img
+                  src={companyLogos[candidate.name]}
+                  alt={`${candidate.name} logo`}
+                  className="company-logo"
+                  onError={(e) => {
+                    e.target.style.display = "none";
+                  }}
+                />
               </div>
 
               <h2>{candidate.name}</h2>
-              <p className="votes">Votes: {candidate.votes}</p>
+              <p className="vote-count">{candidate.votes} votes</p>
 
-              <button onClick={() => voteCandidate(candidate._id)}>
+              <button
+                className="vote-button"
+                onClick={() => voteCandidate(candidate._id)}
+              >
                 Vote
               </button>
             </div>
-          );
-        })}
-      </section>
+          ))}
+        </div>
+      )}
 
-      <section className="result-section">
+      <div className="winner-section">
         <button className="winner-button" onClick={showWinner}>
-          🏆 Show Final Result
+          Show Winner
         </button>
 
-        {winner && <h2 className="winner-message">{winner}</h2>}
-      </section>
+        {winner && <div className="winner-message">{winner}</div>}
+      </div>
     </div>
   );
 }
