@@ -3,11 +3,26 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-cred')
-        DOCKERHUB_USERNAME = 'zeeshandynamo'
-        IMAGE_TAG = "${BUILD_NUMBER}"
+
+        BACKEND_IMAGE = "zeeshandynamo/voting-backend:${BUILD_NUMBER}"
+        FRONTEND_IMAGE = "zeeshandynamo/voting-frontend:${BUILD_NUMBER}"
+
+        KUBECONFIG = "/opt/jenkins-kubeconfig/k3s1-kubeconfig"
+
+        SONAR_HOST_URL = "http://13.235.203.19:9000"
+    }
+
+    tools {
+        jdk 'jdk17'
     }
 
     stages {
+
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
 
         stage('Checkout Code') {
             steps {
@@ -17,97 +32,120 @@ pipeline {
             }
         }
 
-        stage('Build Backend') {
+        stage('Verify Tools') {
+            steps {
+                sh '''
+                    docker --version
+                    kubectl version --client
+                    trivy --version
+                    sonar-scanner --version
+                '''
+            }
+        }
+
+        stage('SonarQube Scan') {
+            steps {
+                withCredentials([string(credentialsId: 'mongo-uri', variable: 'MONGO_URI')]) {
+                    sh '''
+                        sonar-scanner \
+                        -Dsonar.projectKey=voting-app \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=$SONAR_HOST_URL
+                    '''
+                }
+            }
+        }
+
+        stage('Trivy Filesystem Scan') {
+            steps {
+                sh '''
+                    trivy fs . \
+                    --severity HIGH,CRITICAL \
+                    --exit-code 0
+                '''
+            }
+        }
+
+        stage('Build Backend Image') {
             steps {
                 dir('backend') {
-                    sh 'npm install'
+                    sh '''
+                        docker build -t $BACKEND_IMAGE .
+                    '''
                 }
             }
         }
 
-        stage('Build Frontend') {
+        stage('Build Frontend Image') {
             steps {
                 dir('frontend') {
-                    sh 'npm install'
+                    sh '''
+                        docker build -t $FRONTEND_IMAGE .
+                    '''
                 }
             }
         }
 
-        stage('SonarQube Analysis') {
+        stage('Trivy Image Scan') {
             steps {
-                script {
-                    def scannerHome = tool 'sonar-scanner'
-
-                    withSonarQubeEnv('sonarqube') {
-                        sh "${scannerHome}/bin/sonar-scanner"
-                    }
-                }
-            }
-        }
-
-        stage('Build Docker Images') {
-            steps {
-                sh 'docker build -t voting-backend:${IMAGE_TAG} ./backend'
-                sh 'docker build -t voting-frontend:${IMAGE_TAG} ./frontend'
-            }
-        }
-
-        stage('Trivy Security Scan') {
-            steps {
-                sh 'trivy image voting-backend:${IMAGE_TAG}'
-                sh 'trivy image voting-frontend:${IMAGE_TAG}'
-            }
-        }
-
-        stage('DockerHub Login') {
-            steps {
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_USERNAME --password-stdin'
-            }
-        }
-
-        stage('Tag Docker Images') {
-            steps {
-                sh 'docker tag voting-backend:${IMAGE_TAG} zeeshandynamo/voting-backend:${IMAGE_TAG}'
-                sh 'docker tag voting-frontend:${IMAGE_TAG} zeeshandynamo/voting-frontend:${IMAGE_TAG}'
+                sh '''
+                    trivy image $BACKEND_IMAGE --severity HIGH,CRITICAL --exit-code 0
+                    trivy image $FRONTEND_IMAGE --severity HIGH,CRITICAL --exit-code 0
+                '''
             }
         }
 
         stage('Push Images to DockerHub') {
             steps {
-                sh 'docker push zeeshandynamo/voting-backend:${IMAGE_TAG}'
-                sh 'docker push zeeshandynamo/voting-frontend:${IMAGE_TAG}'
-            }
-        }
-
-        stage('Update Kubernetes Image Tags') {
-            steps {
                 sh '''
-                sed -i "s|image: zeeshandynamo/voting-backend:.*|image: zeeshandynamo/voting-backend:${IMAGE_TAG}|g" k8s/backend-deployment.yaml
-                sed -i "s|image: zeeshandynamo/voting-frontend:.*|image: zeeshandynamo/voting-frontend:${IMAGE_TAG}|g" k8s/frontend-deployment.yaml
+                    echo "$DOCKERHUB_CREDENTIALS_PSW" | docker login -u "$DOCKERHUB_CREDENTIALS_USR" --password-stdin
+
+                    docker push $BACKEND_IMAGE
+                    docker push $FRONTEND_IMAGE
                 '''
             }
         }
 
-        stage('Deploy to K3s Kubernetes') {
+        stage('Deploy to Kubernetes') {
             steps {
-                withCredentials([file(credentialsId: 'k3s-kubeconfig', variable: 'KUBECONFIG_FILE')]) {
-                    sh '''
-                    kubectl --kubeconfig=$KUBECONFIG_FILE apply -f k8s/
-                    kubectl --kubeconfig=$KUBECONFIG_FILE rollout status deployment/backend-deployment -n voting-app
-                    kubectl --kubeconfig=$KUBECONFIG_FILE rollout status deployment/frontend-deployment -n voting-app
-                    '''
-                }
+                sh '''
+                    kubectl set image deployment/backend-deployment \
+                    backend-container=$BACKEND_IMAGE \
+                    -n voting-app
+
+                    kubectl set image deployment/frontend-deployment \
+                    frontend-container=$FRONTEND_IMAGE \
+                    -n voting-app
+
+                    kubectl rollout status deployment/backend-deployment -n voting-app --timeout=300s
+
+                    kubectl rollout status deployment/frontend-deployment -n voting-app --timeout=300s
+                '''
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                sh '''
+                    kubectl get pods -n voting-app
+                    kubectl get svc -n voting-app
+                    kubectl get ingress -n voting-app
+                '''
             }
         }
     }
 
     post {
         success {
-            echo 'Pipeline executed successfully!'
+            echo 'Pipeline completed successfully!'
         }
 
         failure {
             echo 'Pipeline failed!'
+        }
+
+        always {
+            cleanWs()
         }
     }
 }
