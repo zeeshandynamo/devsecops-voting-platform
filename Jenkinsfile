@@ -63,17 +63,17 @@ pipeline {
             }
         }
 
-        stage('Deploy to Kubernetes') {
-            steps {
-                sh '''
-                    kubectl set image deployment/backend-deployment backend-container=$BACKEND_IMAGE -n voting-app
-                    kubectl set image deployment/frontend-deployment frontend-container=$FRONTEND_IMAGE -n voting-app
+	stage('Deploy to Kubernetes') {
+	    steps {
+        	sh '''
+            	    kubectl set image deployment/backend-deployment backend=$BACKEND_IMAGE -n voting-app
+	            kubectl set image deployment/frontend-deployment frontend=$FRONTEND_IMAGE -n voting-app
 
-                    kubectl rollout status deployment/backend-deployment -n voting-app --timeout=300s
-                    kubectl rollout status deployment/frontend-deployment -n voting-app --timeout=300s
-                '''
-            }
-        }
+        	    kubectl rollout status deployment/backend-deployment -n voting-app --timeout=300s
+	            kubectl rollout status deployment/frontend-deployment -n voting-app --timeout=300s
+       		'''
+    	    }
+	}	
 
         stage('Verify Deployment') {
             steps {
