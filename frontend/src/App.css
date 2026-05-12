@@ -1,3 +1,98 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to bottom right, #f3f4f6, #e5e7eb);
+  min-height: 100vh;
+  color: #111827;
+}
+
+.app {
+  padding: 40px 20px;
+}
+
+.hero-section {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.hero-section h1 {
+  font-size: 48px;
+  margin-bottom: 15px;
+  font-weight: 800;
+}
+
+.hero-section p {
+  font-size: 18px;
+  color: #4b5563;
+  max-width: 800px;
+  margin: auto;
+  line-height: 1.6;
+}
+
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.company-card {
+  background: white;
+  border-radius: 20px;
+  padding: 30px 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.logo-box {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.company-logo {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+}
+
+.company-card h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.vote-count {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.vote-button,
+.winner-button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.winner-section {
+  margin-top: 50px;
+  text-align: center;
+}
+
+.winner-message {
+  margin-top: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #16a34a;
+}
+
 .custom-logo {
   width: 68px;
   height: 68px;
@@ -6,7 +101,6 @@
   justify-content: center;
 }
 
-/* Amazon */
 .amazon-logo {
   flex-direction: column;
   font-weight: 800;
@@ -19,10 +113,8 @@
   height: 12px;
   border-bottom: 4px solid #ff9900;
   border-radius: 0 0 50px 50px;
-  margin-top: -2px;
 }
 
-/* Microsoft */
 .microsoft-logo .ms-grid {
   width: 48px;
   height: 48px;
@@ -31,23 +123,11 @@
   gap: 5px;
 }
 
-.microsoft-logo .ms-grid span:nth-child(1) {
-  background: #f25022;
-}
+.microsoft-logo .ms-grid span:nth-child(1) { background: #f25022; }
+.microsoft-logo .ms-grid span:nth-child(2) { background: #7fba00; }
+.microsoft-logo .ms-grid span:nth-child(3) { background: #00a4ef; }
+.microsoft-logo .ms-grid span:nth-child(4) { background: #ffb900; }
 
-.microsoft-logo .ms-grid span:nth-child(2) {
-  background: #7fba00;
-}
-
-.microsoft-logo .ms-grid span:nth-child(3) {
-  background: #00a4ef;
-}
-
-.microsoft-logo .ms-grid span:nth-child(4) {
-  background: #ffb900;
-}
-
-/* Salesforce */
 .salesforce-logo {
   width: 76px;
   height: 48px;
@@ -57,10 +137,8 @@
   font-size: 11px;
   font-weight: 800;
   text-transform: lowercase;
-  box-shadow: 0 8px 20px rgba(0, 161, 224, 0.25);
 }
 
-/* Adobe */
 .adobe-logo {
   width: 54px;
   height: 54px;
@@ -68,6 +146,5 @@
   color: white;
   font-size: 38px;
   font-weight: 900;
-  font-family: Arial, sans-serif;
   border-radius: 10px;
 }
