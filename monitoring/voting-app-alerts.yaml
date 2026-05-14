@@ -1,0 +1,82 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: voting-app-alerts
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  groups:
+    - name: voting-app.rules
+      rules:
+        - alert: DevSecOpsFrontendDeploymentUnavailable
+          expr: kube_deployment_status_replicas_available{namespace="voting-app", deployment="frontend-deployment"} < 1
+          for: 1m
+          labels:
+            severity: critical
+            namespace: voting-app
+            service: frontend
+          annotations:
+            summary: "Frontend deployment is unavailable"
+            description: "No frontend replicas are available in the voting-app namespace."
+
+        - alert: DevSecOpsBackendDeploymentUnavailable
+          expr: kube_deployment_status_replicas_available{namespace="voting-app", deployment="backend-deployment"} < 1
+          for: 1m
+          labels:
+            severity: critical
+            namespace: voting-app
+            service: backend
+          annotations:
+            summary: "Backend deployment is unavailable"
+            description: "No backend replicas are available in the voting-app namespace."
+
+        - alert: DevSecOpsPodCrashLooping
+          expr: kube_pod_container_status_waiting_reason{namespace="voting-app", reason="CrashLoopBackOff"} > 0
+          for: 1m
+          labels:
+            severity: critical
+            namespace: voting-app
+          annotations:
+            summary: "Pod is crashlooping"
+            description: "A pod in voting-app namespace is in CrashLoopBackOff state."
+
+        - alert: DevSecOpsPodNotReady
+          expr: kube_pod_status_ready{namespace="voting-app", condition="true"} == 0
+          for: 2m
+          labels:
+            severity: warning
+            namespace: voting-app
+          annotations:
+            summary: "Pod is not ready"
+            description: "One or more pods in voting-app namespace are not ready."
+
+        - alert: DevSecOpsContainerRestarting
+          expr: increase(kube_pod_container_status_restarts_total{namespace="voting-app"}[5m]) > 1
+          for: 1m
+          labels:
+            severity: warning
+            namespace: voting-app
+          annotations:
+            summary: "Container restarted multiple times"
+            description: "A container in voting-app namespace restarted more than once in the last 5 minutes."
+
+        - alert: DevSecOpsHighCPUUsage
+          expr: sum(rate(container_cpu_usage_seconds_total{namespace="voting-app", container!="", pod!=""}[5m])) by (pod) > 0.5
+          for: 2m
+          labels:
+            severity: warning
+            namespace: voting-app
+          annotations:
+            summary: "High CPU usage detected"
+            description: "A pod in voting-app namespace is using high CPU for more than 2 minutes."
+
+        - alert: DevSecOpsHighMemoryUsage
+          expr: sum(container_memory_working_set_bytes{namespace="voting-app", container!="", pod!=""}) by (pod) > 300000000
+          for: 2m
+          labels:
+            severity: warning
+            namespace: voting-app
+          annotations:
+            summary: "High memory usage detected"
+            description: "A pod in voting-app namespace is using more than 300MB memory for more than 2 minutes."
