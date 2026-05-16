@@ -375,6 +375,24 @@ Planned enhancements:
 
 ---
 
+# 📚 Documentation
+
+Detailed documentation is available inside the `docs/` directory.
+
+## Architecture
+
+* [Architecture Overview](docs/architecture/architecture-overview.md)
+
+## Monitoring
+
+* [Monitoring Overview](docs/monitoring/monitoring-overview.md)
+
+## Logging
+
+* [Centralized Logging Overview](docs/logging/logging-overview.md)
+
+---
+
 # 📸 Screenshots To Add
 
 Recommended screenshots:
@@ -418,4 +436,4 @@ DevOps | SRE | Cloud | Kubernetes | Observability
 
 # ⭐ Project Goal
 
-The goal of this project is to build a production-style DevSecOps and SRE platform demonstrating modern cloud-native infrastructure, automation, observability, security, and operational reliability practic
+The goal of this project is to build a production-style DevSecOps and SRE platform demonstrating modern cloud-native infrastructure, automation, observability, security, and operational reliability practices.
