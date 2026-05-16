@@ -1,135 +1,80 @@
 # 🚀 DevSecOps Voting Platform
 
-A complete end-to-end **DevSecOps CI/CD Pipeline Project** built using modern cloud-native technologies including Kubernetes, Jenkins, Docker, SonarQube, Trivy, Prometheus, Grafana, and AWS.
+## End-to-End DevSecOps + SRE Platform on Kubernetes
 
-This project demonstrates how a real-world production-style application can be:
-
-* Containerized using Docker
-* Automatically built and deployed using Jenkins
-* Security scanned using Trivy
-* Code quality checked using SonarQube
-* Deployed to Kubernetes (K3s)
-* Monitored using Prometheus & Grafana
-* Alerted using Telegram notifications
-* Auto-scaled using HPA
-* Exposed publicly using Traefik Ingress
+A production-style DevSecOps and SRE project demonstrating complete CI/CD automation, Kubernetes orchestration, monitoring, alerting, centralized logging, and observability using modern cloud-native tools.
 
 ---
 
-# 🌐 Live Project
+# 📌 Project Overview
 
-## Application URL
+This project was built to simulate a real-world DevOps/SRE production environment.
 
-```bash
-http://13.205.126.153
-```
+The platform automates:
 
-## Jenkins
+* Application build and deployment
+* Security scanning
+* Docker image management
+* Kubernetes deployment
+* Monitoring and alerting
+* Centralized logging
+* Incident detection and troubleshooting
 
-```bash
-http://3.6.28.117:8080
-```
-
-## SonarQube
-
-```bash
-http://3.6.28.117:9000
-```
-
-## Grafana
-
-```bash
-http://13.205.126.153:32072
-```
+The project follows modern DevSecOps and Site Reliability Engineering (SRE) practices.
 
 ---
 
-# 🏗️ Project Architecture
+# 🏗️ High Level Architecture
 
 ```text
-Developer
-   ↓
 GitHub Repository
-   ↓
-GitHub Webhook
-   ↓
+        ↓
 Jenkins CI/CD Pipeline
-   ↓
+        ↓
 SonarQube Code Analysis
-   ↓
-Trivy Security Scan
-   ↓
-Docker Image Build
-   ↓
-DockerHub Push
-   ↓
-K3s Kubernetes Deployment
-   ↓
-Traefik Ingress Routing
-   ↓
+        ↓
+Trivy Security Scanning
+        ↓
+Docker Build & Push
+        ↓
+Kubernetes (K3s)
+        ↓
 Prometheus Monitoring
-   ↓
+        ↓
 Grafana Dashboards
-   ↓
-Telegram Alerts
+        ↓
+Alertmanager + Telegram Alerts
+        ↓
+EFK Logging Stack
+(Elasticsearch + Fluent Bit + Kibana)
 ```
 
 ---
 
-# ☁️ AWS Infrastructure
+# 🛠️ Tech Stack
 
-## EC2 Instances
-
-### 🖥️ CI/CD Server
-
-| Component      | Purpose                |
-| -------------- | ---------------------- |
-| Jenkins        | CI/CD Automation       |
-| SonarQube      | Code Quality Analysis  |
-| Docker         | Container Build Engine |
-| Trivy          | Security Scanning      |
-| GitHub Webhook | Auto Trigger Pipeline  |
-
-### ☸️ K3s Kubernetes Server
-
-| Component      | Purpose                 |
-| -------------- | ----------------------- |
-| K3s Kubernetes | Container Orchestration |
-| Traefik        | Ingress Controller      |
-| Prometheus     | Metrics Collection      |
-| Grafana        | Visualization           |
-| Alertmanager   | Alert Routing           |
-| Node Exporter  | Node Metrics            |
-
----
-
-# 🛠️ Technology Stack
-
-## Cloud & Infrastructure
-
-* AWS EC2
-* Ubuntu Linux
-* Elastic IP
-* Security Groups
-
-## DevOps & CI/CD
+## CI/CD & DevSecOps
 
 * Jenkins
 * GitHub Webhooks
 * Docker
 * DockerHub
-* Trivy
 * SonarQube
+* Trivy
 
-## Kubernetes
+---
 
-* K3s
-* Deployments
+## Kubernetes & Infrastructure
+
+* K3s Kubernetes
+* Kubernetes Deployments
 * Services
-* Ingress
-* Secrets
-* HPA
-* Namespace Isolation
+* Namespaces
+* ReplicaSets
+* StatefulSets
+* Traefik Ingress Controller
+
+---
 
 ## Monitoring & Observability
 
@@ -137,337 +82,340 @@ Telegram Alerts
 * Grafana
 * Alertmanager
 * Node Exporter
+* kube-state-metrics
 * Telegram Alerts
 
-## Application Stack
+---
 
-### Backend
+## Centralized Logging
 
-* Node.js
-* Express.js
-* MongoDB Atlas
-* Mongoose
-
-### Frontend
-
-* React.js
-* Axios
-* Modern Pastel UI
+* Elasticsearch
+* Fluent Bit
+* Kibana
 
 ---
 
-# 📁 Project Structure
+# 📂 Repository Structure
 
 ```text
-DevSecOps-Voting-Platform/
-│
-├── backend/
-├── frontend/
-├── k8s/
-├── monitoring/
-├── docs/
-├── Jenkinsfile
-├── docker-compose.yml
-├── sonar-project.properties
-└── README.md
+frontend/
+backend/
+k8s/
+monitoring/
+logging/
+  └── efk/
+Jenkinsfile
+README.md
 ```
 
 ---
 
-# ⚙️ CI/CD Pipeline Workflow
+# ⚙️ CI/CD Pipeline Flow
 
-## 🔄 End-to-End Automation Flow
+## Pipeline Stages
 
-### 1️⃣ Developer Pushes Code
+### 1. Source Code Checkout
 
-Code is pushed to GitHub repository.
-
-### 2️⃣ GitHub Webhook Triggers Jenkins
-
-GitHub automatically notifies Jenkins.
-
-### 3️⃣ Jenkins Pipeline Starts
-
-Jenkins pulls latest source code.
-
-### 4️⃣ SonarQube Analysis
-
-Code quality and security analysis is performed.
-
-### 5️⃣ Docker Image Build
-
-Backend and frontend images are built.
-
-### 6️⃣ Trivy Security Scan
-
-Container vulnerabilities are scanned.
-
-### 7️⃣ DockerHub Push
-
-Images are pushed with dynamic Jenkins build tags.
-
-### 8️⃣ Kubernetes Deployment
-
-Jenkins deploys workloads to K3s cluster.
-
-### 9️⃣ Monitoring & Alerts
-
-Prometheus and Grafana monitor workloads and Telegram sends alerts.
+Jenkins automatically pulls the latest source code from GitHub.
 
 ---
 
-# 🐳 Docker Setup
+### 2. SonarQube Analysis
 
-## Backend Dockerization
+Static code analysis is performed to identify:
 
-* Node.js backend containerized
-* Production-ready Dockerfile
-* Optimized image layers
+* Bugs
+* Vulnerabilities
+* Code smells
+* Security issues
 
-## Frontend Dockerization
+---
 
-* React frontend containerized
-* Nginx used for frontend serving
+### 3. Trivy Security Scanning
 
-## DockerHub Images
+Docker images are scanned for:
 
-```bash
-zeeshandynamo/voting-backend:<BUILD_NUMBER>
-zeeshandynamo/voting-frontend:<BUILD_NUMBER>
-```
+* Vulnerable packages
+* Critical CVEs
+* Security risks
+
+---
+
+### 4. Docker Build
+
+Application images are built using Docker.
+
+---
+
+### 5. Docker Push
+
+Images are pushed to DockerHub.
+
+---
+
+### 6. Kubernetes Deployment
+
+Applications are deployed to K3s Kubernetes cluster.
 
 ---
 
 # ☸️ Kubernetes Deployment
 
-## Namespace Isolation
+The application is deployed using Kubernetes manifests.
 
-```bash
+## Components
+
+### Frontend Deployment
+
+* NGINX frontend container
+* Multiple replicas
+* Load-balanced traffic
+
+### Backend Deployment
+
+* Node.js backend API
+* Replica management
+* Internal service communication
+
+### Services
+
+* ClusterIP services
+* NodePort access
+
+### Namespaces
+
+Namespaces are used for isolation:
+
+```text
+monitoring
+logging
 voting-app
 ```
 
-## Kubernetes Components
+---
 
-* Deployments
-* Services
-* Ingress
-* Secrets
-* HPA
+# 📊 Monitoring Stack
 
-## Replica Configuration
+## Prometheus
 
-```bash
-Backend Replicas: 2
-Frontend Replicas: 2
+Prometheus collects:
+
+* Node metrics
+* Pod metrics
+* Kubernetes metrics
+* Application metrics
+
+---
+
+## Grafana
+
+Grafana dashboards visualize:
+
+* CPU usage
+* Memory usage
+* Pod health
+* Namespace resource usage
+* Cluster metrics
+* Deployment availability
+
+---
+
+## Alertmanager
+
+Alertmanager handles:
+
+* Alert routing
+* Alert grouping
+* Telegram notifications
+* Incident alerts
+
+---
+
+# 🚨 Alerting System
+
+Telegram alerts were configured for:
+
+* Frontend deployment failures
+* Kubernetes component failures
+* Pod availability issues
+* Critical cluster alerts
+
+Example:
+
+```text
+Frontend deployment unavailable
+No frontend replicas are available
 ```
 
-## Autoscaling
+---
+
+# 📜 EFK Logging Stack
+
+## Elasticsearch
+
+Stores centralized Kubernetes logs.
+
+---
+
+## Fluent Bit
+
+Collects:
+
+* Pod logs
+* Container logs
+* Kubernetes logs
+
+and forwards them to Elasticsearch.
+
+---
+
+## Kibana
+
+Provides:
+
+* Log visualization
+* Log searching
+* Incident investigation
+* Namespace filtering
+* Pod-level troubleshooting
+
+---
+
+# 🔍 Incident Simulation & Troubleshooting
+
+A real outage simulation was performed.
+
+## Scenario
+
+Frontend replicas were intentionally scaled to zero.
 
 ```bash
-Min Pods: 2
-Max Pods: 5
-CPU Threshold: 70%
+kubectl scale deployment frontend-deployment -n voting-app --replicas=0
 ```
+
+---
+
+## Observed Results
+
+### Grafana
+
+* Frontend pods disappeared
+* Namespace metrics changed
+* Deployment health degraded
+
+### Alertmanager
+
+* Critical Telegram alert fired
+
+### Kibana
+
+* Pod shutdown logs observed
+* NGINX worker termination logs captured
+
+---
+
+## Recovery
+
+Frontend replicas restored:
+
+```bash
+kubectl scale deployment frontend-deployment -n voting-app --replicas=2
+```
+
+System recovered successfully.
+
+---
+
+# 📈 Key Learning Outcomes
+
+This project provided hands-on experience with:
+
+* DevSecOps pipelines
+* Kubernetes deployments
+* Monitoring and observability
+* Centralized logging
+* Incident response
+* Alerting systems
+* Troubleshooting production-like issues
+* Infrastructure organization
 
 ---
 
 # 🔐 Security Features
 
-## SonarQube
+Implemented:
 
-* Code smells detection
-* Security hotspot analysis
-* Static code analysis
+* SonarQube code scanning
+* Trivy image scanning
+* Namespace isolation
+* Containerized workloads
 
-## Trivy
+Planned future enhancements:
 
-* Container vulnerability scanning
-* Critical & High vulnerability detection
-
-## Kubernetes Secrets
-
-Sensitive MongoDB connection string stored securely.
-
----
-
-# 📊 Monitoring & Alerting
-
-## Prometheus
-
-Collects Kubernetes and node metrics.
-
-## Grafana Dashboards
-
-* Kubernetes Cluster Monitoring
-* Node Metrics
-* Pod Metrics
-* Namespace Metrics
-
-## Telegram Alerts
-
-Configured for:
-
-* Pod failures
-* Deployment issues
-* Cluster alerts
-
----
-
-# 🎨 Application Features
-
-## Frontend
-
-* Modern pastel UI
-* Company voting cards
-* Responsive layout
-* Live vote updates
-* Winner announcement system
-
-## Backend API Endpoints
-
-```bash
-GET    /health
-GET    /api/candidates
-POST   /api/candidates
-PUT    /api/candidates/vote/:id
-```
-
----
-
-# 📈 Production Features
-
-✅ Dynamic Docker Image Tagging
-
-✅ Kubernetes Namespace Isolation
-
-✅ Health Checks
-
-* Liveness Probe
-* Readiness Probe
-
-✅ Horizontal Pod Autoscaler
-
-✅ Monitoring Stack
-
-✅ Telegram Alerting
-
-✅ CI/CD Automation
-
----
-
-# 🧠 Problems Faced & Fixes
-
-## Docker Socket Permission Issue
-
-### Problem
-
-Jenkins could not access Docker daemon.
-
-### Fix
-
-```bash
-sudo chmod 666 /var/run/docker.sock
-```
-
----
-
-## Kubernetes API TLS Error
-
-### Problem
-
-Jenkins could not connect to Kubernetes API.
-
-### Fix
-
-Updated kubeconfig to use K3s private IP instead of localhost.
-
----
-
-## Elastic IP Issue
-
-### Problem
-
-EC2 public IP changed after restart.
-
-### Fix
-
-Attached Elastic IPs to both servers.
-
----
-
-# 📸 Suggested Screenshots
-
-* AWS EC2 Dashboard
-* Jenkins Pipeline Success
-* SonarQube Dashboard
-* Trivy Scan Results
-* DockerHub Images
-* Kubernetes Pods
-* Ingress
-* Grafana Dashboards
-* Telegram Alerts
-* Live Voting Application
+* RBAC hardening
+* Secrets management
+* NetworkPolicies
+* Falco runtime security
+* TLS/HTTPS
 
 ---
 
 # 🚀 Future Improvements
 
-* HTTPS using cert-manager
-* Custom domain integration
-* RBAC security hardening
-* ArgoCD GitOps deployment
-* Centralized logging stack
-* Redis integration
+Planned enhancements:
+
+* HTTPS + Domain setup
+* GitOps using ArgoCD
+* Horizontal Pod Autoscaler (HPA)
 * Multi-node Kubernetes cluster
+* OpenTelemetry tracing
+* Advanced Kubernetes security
+* Helm charts
+* Production-grade ingress routing
+
+---
+
+# 📸 Screenshots To Add
+
+Recommended screenshots:
+
+* Jenkins pipeline success
+* SonarQube dashboard
+* Trivy scan output
+* Kubernetes pods
+* Grafana dashboards
+* Telegram alerts
+* Kibana Discover logs
+* EFK architecture
+
+---
+
+# 🧠 Project Highlights
+
+✅ End-to-End CI/CD Pipeline
+
+✅ Kubernetes Deployment
+
+✅ DevSecOps Security Scanning
+
+✅ Monitoring & Alerting
+
+✅ Centralized Logging
+
+✅ Incident Simulation & Recovery
+
+✅ Observability & Troubleshooting
 
 ---
 
 # 👨‍💻 Author
 
-## Zeeshanali M Mannur
+Zeeshan Ali
 
-DevSecOps | Cloud | Kubernetes | DevOps Engineer
-
-### Technologies Worked On
-
-* AWS
-* Docker
-* Kubernetes
-* Jenkins
-* SonarQube
-* Trivy
-* Grafana
-* Prometheus
-* Linux
-* GitHub Actions
-* Terraform
-* Ansible
+DevOps | SRE | Cloud | Kubernetes | Observability
 
 ---
 
-# ⭐ Final Note
+# ⭐ Project Goal
 
-This project was designed to simulate a real-world production-grade DevSecOps environment with complete CI/CD automation, monitoring, scalability, and security best practices.
-
-It demonstrates practical implementation of:
-
-* Cloud Infrastructure
-* Containerization
-* Kubernetes Orchestration
-* DevSecOps Practices
-* CI/CD Automation
-* Monitoring & Alerting
-* Production Deployment Workflows
-
----
-
-# 📌 If You Like This Project
-
-⭐ Star the repository
-
-🍴 Fork the repository
-
-📢 Connect on LinkedIn
-🔗 https://www.linkedin.com/in/zeeshanali-m-mannur-2a5523141/
-
-🚀 Keep Learning DevOps & Cloud Technologies
+The goal of this project is to build a production-style DevSecOps and SRE platform demonstrating modern cloud-native infrastructure, automation, observability, security, and operational reliability practic
