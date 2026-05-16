@@ -1,6 +1,6 @@
 # 🚀 DevSecOps Voting Platform
 
-## End-to-End DevSecOps + SRE Platform on Kubernetes 
+## End-to-End DevSecOps + SRE Platform on Kubernetes
 
 A production-style DevSecOps and SRE project demonstrating complete CI/CD automation, Kubernetes orchestration, monitoring, alerting, centralized logging, and observability using modern cloud-native tools.
 
