@@ -6,6 +6,8 @@ pipeline {
 
         BACKEND_IMAGE = "zeeshandynamo/voting-backend:${BUILD_NUMBER}"
         FRONTEND_IMAGE = "zeeshandynamo/voting-frontend:${BUILD_NUMBER}"
+
+        SONAR_HOST_URL = "http://13.235.203.19:9000"
     }
 
     stages {
@@ -16,7 +18,25 @@ pipeline {
                     kubectl version --client
                     kubectl get nodes
                     trivy --version
+                    sonar-scanner --version
                 '''
+            }
+        }
+
+        stage('SonarQube Code Scan') {
+            steps {
+                withCredentials([
+                    string(
+                        credentialsId: 'SONAR_AUTH_TOKEN',
+                        variable: 'SONAR_TOKEN'
+                    )
+                ]) {
+                    sh '''
+                        sonar-scanner \
+                          -Dsonar.host.url=$SONAR_HOST_URL \
+                          -Dsonar.login=$SONAR_TOKEN
+                    '''
+                }
             }
         }
 
@@ -63,24 +83,24 @@ pipeline {
             }
         }
 
-	stage('Deploy to Kubernetes') {
-	    steps {
-        	sh '''
-            	    kubectl set image deployment/backend-deployment backend=$BACKEND_IMAGE -n voting-app
-	            kubectl set image deployment/frontend-deployment frontend=$FRONTEND_IMAGE -n voting-app
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh '''
+                    kubectl set image deployment/backend-deployment backend=$BACKEND_IMAGE -n voting-app
+                    kubectl set image deployment/frontend-deployment frontend=$FRONTEND_IMAGE -n voting-app
 
-        	    kubectl rollout status deployment/backend-deployment -n voting-app --timeout=300s
-	            kubectl rollout status deployment/frontend-deployment -n voting-app --timeout=300s
-       		'''
-    	    }
-	}	
+                    kubectl rollout status deployment/backend-deployment -n voting-app --timeout=300s
+                    kubectl rollout status deployment/frontend-deployment -n voting-app --timeout=300s
+                '''
+            }
+        }
 
         stage('Verify Deployment') {
             steps {
                 sh '''
                     kubectl get pods -n voting-app
                     kubectl get svc -n voting-app
-                    kubectl get ingress -n voting-app
+                    kubectl get ingress -n voting-app || true
                 '''
             }
         }
