@@ -1,6 +1,6 @@
 # Architecture Overview
 
-This document explains the complete architecture of the DevSecOps Voting Platform, including CI/CD, Kubernetes deployment, monitoring, alerting, and centralized logging.
+This document explains the completeO architecture of the DevSecOps Voting Platform, including CI/CD, Kubernetes deployment, monitoring, alerting, and centralized logging.
 
 ---
 
