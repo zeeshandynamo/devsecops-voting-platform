@@ -17,6 +17,31 @@ app.use(express.json());
 
 app.use("/api/candidates", candidateRoutes);
 
+// TODO: Remove debug logs before production
+console.log("Debug mode enabled");
+
+// Intentional duplicate code block for SonarQube demo
+function duplicateFunctionOne() {
+  console.log("duplicate code");
+  console.log("duplicate code");
+  console.log("duplicate code");
+}
+
+// Intentional duplicate code block for SonarQube demo
+function duplicateFunctionTwo() {
+  console.log("duplicate code");
+  console.log("duplicate code");
+  console.log("duplicate code");
+}
+
+// Intentional unused variable
+const unusedVariable = "This variable is never used";
+
+// Intentional weak equality check
+if ("5" == 5) {
+  console.log("Weak equality detected");
+}
+
 app.get("/health", (req, res) => {
   res.json({
     status: "OK",
