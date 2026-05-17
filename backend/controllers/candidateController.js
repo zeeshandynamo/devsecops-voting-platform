@@ -1,6 +1,5 @@
 const Candidate = require("../models/Candidate");
 
-
 // CREATE NEW CANDIDATE
 exports.createCandidate = async (req, res) => {
   try {
@@ -17,7 +16,6 @@ exports.createCandidate = async (req, res) => {
   }
 };
 
-
 // GET ALL CANDIDATES
 exports.getCandidates = async (req, res) => {
   try {
@@ -31,7 +29,6 @@ exports.getCandidates = async (req, res) => {
     });
   }
 };
-
 
 // VOTE FOR CANDIDATE
 exports.voteCandidate = async (req, res) => {
@@ -54,5 +51,27 @@ exports.voteCandidate = async (req, res) => {
     res.status(500).json({
       error: error.message,
     });
+  }
+};
+
+// RESET ALL VOTES
+exports.resetVotes = async (req, res) => {
+  try {
+
+    await Candidate.updateMany({}, { $set: { votes: 0 } });
+
+    const candidates = await Candidate.find();
+
+    res.status(200).json({
+      message: "All votes reset successfully",
+      candidates,
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      error: error.message,
+    });
+
   }
 };
