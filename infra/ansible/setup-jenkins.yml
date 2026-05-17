@@ -1,0 +1,47 @@
+---
+- name: Run Jenkins container with JCasC
+  hosts: jenkins
+  become: true
+
+  tasks:
+    - name: Create Jenkins home directory
+      file:
+        path: /opt/jenkins_home
+        state: directory
+        owner: 1000
+        group: 1000
+        mode: "0755"
+
+    - name: Create Jenkins JCasC directory
+      file:
+        path: /opt/jenkins-casc
+        state: directory
+        mode: "0755"
+
+    - name: Copy Jenkins JCasC file
+      copy:
+        src: ../jenkins-casc/jenkins.yaml
+        dest: /opt/jenkins-casc/jenkins.yaml
+        mode: "0644"
+
+    - name: Copy Jenkins env file
+      copy:
+        src: ../jenkins-casc/jenkins.env.example
+        dest: /opt/jenkins.env
+        mode: "0600"
+
+    - name: Remove existing Jenkins container if present
+      shell: docker rm -f jenkins || true
+
+    - name: Run Jenkins container
+      shell: |
+        docker run -d \
+          --name jenkins \
+          --restart always \
+          --env-file /opt/jenkins.env \
+          -p 8080:8080 \
+          -p 50000:50000 \
+          -v /opt/jenkins_home:/var/jenkins_home \
+          -v /opt/jenkins-casc:/var/jenkins_casc \
+          -v /var/run/docker.sock:/var/run/docker.sock \
+          jenkins/jenkins:lts

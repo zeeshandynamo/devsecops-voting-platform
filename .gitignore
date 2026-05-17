@@ -141,3 +141,15 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+infra/terraform/terraform.tfvars
+infra/ansible/inventory.ini
+infra/jenkins-casc/*.env
+
+# Terraform local files
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+.terraform.lock.hcl

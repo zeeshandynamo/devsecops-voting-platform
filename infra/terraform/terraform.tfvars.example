@@ -1,0 +1,4 @@
+cat > infra/terraform/terraform.tfvars.example <<'EOF'
+key_name       = "devsecops-key.pem"
+allowed_ssh_ip = "YOUR_PUBLIC_IP/32"
+EOF
