@@ -71,19 +71,39 @@ body {
 }
 
 .vote-button,
-.winner-button {
-  background: #2563eb;
-  color: white;
+.winner-button,
+.reset-button {
   border: none;
   padding: 12px 25px;
   border-radius: 12px;
   font-size: 16px;
   cursor: pointer;
+  color: white;
+  font-weight: 600;
+}
+
+.vote-button,
+.winner-button {
+  background: #2563eb;
+}
+
+.reset-button {
+  background: #dc2626;
+}
+
+.reset-button:hover {
+  background: #b91c1c;
 }
 
 .winner-section {
   margin-top: 50px;
   text-align: center;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
 }
 
 .winner-message {
@@ -123,10 +143,21 @@ body {
   gap: 5px;
 }
 
-.microsoft-logo .ms-grid span:nth-child(1) { background: #f25022; }
-.microsoft-logo .ms-grid span:nth-child(2) { background: #7fba00; }
-.microsoft-logo .ms-grid span:nth-child(3) { background: #00a4ef; }
-.microsoft-logo .ms-grid span:nth-child(4) { background: #ffb900; }
+.microsoft-logo .ms-grid span:nth-child(1) {
+  background: #f25022;
+}
+
+.microsoft-logo .ms-grid span:nth-child(2) {
+  background: #7fba00;
+}
+
+.microsoft-logo .ms-grid span:nth-child(3) {
+  background: #00a4ef;
+}
+
+.microsoft-logo .ms-grid span:nth-child(4) {
+  background: #ffb900;
+}
 
 .salesforce-logo {
   width: 76px;

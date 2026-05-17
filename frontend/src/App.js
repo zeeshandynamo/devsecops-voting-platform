@@ -90,6 +90,24 @@ function App() {
     }
   };
 
+  const resetVotes = async () => {
+    try {
+      await axios.put(`${API_URL}/reset`);
+
+      fetchCandidates();
+
+      setWinner(null);
+
+      alert("All votes reset successfully");
+
+    } catch (error) {
+
+      console.error("Error resetting votes:", error);
+
+      alert("Failed to reset votes");
+    }
+  };
+
   const showWinner = () => {
     if (candidates.length === 0) {
       setWinner("No candidates available");
@@ -107,6 +125,7 @@ function App() {
     <div className="app">
       <div className="hero-section">
         <h1>DevSecOps Voting Platform</h1>
+
         <p>
           Vote for your favorite tech company and watch the result update live
           through our Kubernetes-powered platform.
@@ -124,7 +143,10 @@ function App() {
               </div>
 
               <h2>{candidate.name}</h2>
-              <p className="vote-count">{candidate.votes} votes</p>
+
+              <p className="vote-count">
+                {candidate.votes} votes
+              </p>
 
               <button
                 className="vote-button"
@@ -138,11 +160,31 @@ function App() {
       )}
 
       <div className="winner-section">
-        <button className="winner-button" onClick={showWinner}>
-          Show Winner
-        </button>
 
-        {winner && <div className="winner-message">{winner}</div>}
+        <div className="action-buttons">
+
+          <button
+            className="winner-button"
+            onClick={showWinner}
+          >
+            Show Winner
+          </button>
+
+          <button
+            className="reset-button"
+            onClick={resetVotes}
+          >
+            Reset Votes
+          </button>
+
+        </div>
+
+        {winner && (
+          <div className="winner-message">
+            {winner}
+          </div>
+        )}
+
       </div>
     </div>
   );
