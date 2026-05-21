@@ -48,6 +48,7 @@ Alertmanager + Telegram Alerts
 EFK Logging Stack
 (Elasticsearch + Fluent Bit + Kibana)
 ```
+<img width="1536" height="1024" alt="iamge" src="https://github.com/user-attachments/assets/c815128e-7f6d-43be-b9c4-497260a9abc4" />
 
 ---
 
