@@ -392,6 +392,9 @@ Detailed documentation is available inside the `docs/` directory.
 
 * [Centralized Logging Overview](docs/logging/logging-overview.md)
 
+<img width="1536" height="1024" alt="iamge" src="https://github.com/user-attachments/assets/015b7ee3-f1dd-4ee0-8d9e-bcd9ccfc2827" />
+
+
 ---
 
 # 🧠 Project Highlights
