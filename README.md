@@ -393,21 +393,6 @@ Detailed documentation is available inside the `docs/` directory.
 
 ---
 
-# 📸 Screenshots To Add
-
-Recommended screenshots:
-
-* Jenkins pipeline success
-* SonarQube dashboard
-* Trivy scan output
-* Kubernetes pods
-* Grafana dashboards
-* Telegram alerts
-* Kibana Discover logs
-* EFK architecture
-
----
-
 # 🧠 Project Highlights
 
 ✅ End-to-End CI/CD Pipeline
