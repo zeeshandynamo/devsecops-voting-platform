@@ -367,7 +367,6 @@ Planned enhancements:
 
 * HTTPS + Domain setup
 * GitOps using ArgoCD
-* Horizontal Pod Autoscaler (HPA)
 * Multi-node Kubernetes cluster
 * OpenTelemetry tracing
 * Advanced Kubernetes security
